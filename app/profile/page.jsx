@@ -1,18 +1,18 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import Profile from "@components/Profile";
 import { useSession } from "next-auth/react";
 
 const MyProfile = () => {
   const { data: session } = useSession();
-  const [allPosts, setAllPosts] = useState([]);
+  const [posts, setPosts] = useState([]);
 
   const fetchPosts = async () => {
     const response = await fetch(`/api/users/${session?.user.id}/posts`);
     const data = await response.json();
 
-    setAllPosts(data);
+    setPosts(data);
   };
 
   useEffect(() => {
@@ -26,7 +26,7 @@ const MyProfile = () => {
     <Profile
       name="My"
       desc="Welcome to your personalized profile page"
-      data={allPosts}
+      data={posts}
       handleEdit={handleEdit}
       handleDelete={handleDelete}
     />
