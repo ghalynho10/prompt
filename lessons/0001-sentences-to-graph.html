@@ -1,0 +1,85 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Lesson 1: From sentences to a graph</title>
+<link rel="stylesheet" href="../assets/style.css">
+</head>
+<body>
+<main>
+<h1>From sentences to a graph</h1>
+<p class="meta">Lesson 1 · about 10 minutes · Mission: build a GraphRAG project · <a href="../reference/0001-nouns-and-verbs.html">Reference card</a></p>
+
+<h2>The win</h2>
+<p>By the end you can look at a sentence and say which parts become <strong>nodes</strong> and which become <strong>edges</strong>. A GraphRAG pipeline does exactly this step, with an LLM, for every chunk of your documents.</p>
+
+<h2>The idea</h2>
+<p>A <strong>node</strong> is a thing. An <strong>edge</strong> is a named, directed link between two nodes. The modeling approach taught in Neo4j's data modeling course is to split your data into statements, then use the nouns as nodes and the verbs as relationships (<a href="https://graphacademy.neo4j.com/courses/modeling-fundamentals/">Graph Data Modeling Fundamentals</a>, as described in search results; I could not open the page itself).</p>
+<p>From SQL, think of nodes as rows and edges as foreign keys that you can name, point, and follow without writing a join.</p>
+<p>The statement <em>"Ada Lovelace worked with Charles Babbage"</em> becomes:</p>
+<p><code>(Ada Lovelace) -[WORKED_WITH]-&gt; (Charles Babbage)</code></p>
+
+<h2>Why this matters for GraphRAG</h2>
+<p>The Microsoft GraphRAG paper has an LLM extract an entity knowledge graph from the source documents, then group closely related entities and summarise each group (<a href="https://arxiv.org/abs/2404.16130">Edge et al., 2024</a>). The first stage is the node-and-edge step you are practising now. The paper's motivation is questions about a whole corpus, which plain chunk retrieval handles poorly.</p>
+
+<h2>Try it: tag the sentence</h2>
+<p>Click a phrase to cycle: untagged, <strong>node</strong>, <strong>edge</strong>. Then press Check.</p>
+
+<div class="tagger">
+<p>
+<span class="chunk" data-answer="node">Ada Lovelace</span>
+<span class="chunk" data-answer="edge">worked with</span>
+<span class="chunk" data-answer="node">Charles Babbage</span>
+</p>
+<button class="check">Check</button>
+<p class="result"></p>
+</div>
+
+<div class="tagger">
+<p>
+<span class="chunk" data-answer="node">Charles Babbage</span>
+<span class="chunk" data-answer="edge">designed</span>
+<span class="chunk" data-answer="node">the Analytical Engine</span>
+</p>
+<button class="check">Check</button>
+<p class="result"></p>
+</div>
+
+<h2>Retrieval practice</h2>
+<p>Answer from memory before peeking at the card. Every answer has the same length, so no option gives it away.</p>
+
+<div class="q" data-correct="b">
+<p>In "Ada Lovelace worked with Charles Babbage", what is "Ada Lovelace"?</p>
+<button data-k="a">A graph path</button>
+<button data-k="b">A graph node</button>
+<button data-k="c">A graph edge</button>
+<p class="why">A person is a thing, so it is a node. Edges name how two things relate.</p>
+</div>
+
+<div class="q" data-correct="c">
+<p>What is "designed" in "Charles Babbage designed the Analytical Engine"?</p>
+<button data-k="a">A graph node</button>
+<button data-k="b">A graph path</button>
+<button data-k="c">A graph edge</button>
+<p class="why">It is the verb linking two nodes, so it becomes the edge, pointing from Babbage to the Engine.</p>
+</div>
+
+<div class="q" data-correct="a">
+<p>Two sentences both mention the Analytical Engine. After merging duplicates, how many nodes represent it?</p>
+<button data-k="a">One shared node</button>
+<button data-k="b">Two split nodes</button>
+<button data-k="c">Four split nodes</button>
+<p class="why">One shared node is what lets you travel from Babbage through the Engine to anyone else linked to it. Merging mentions of the same thing is called entity resolution; GraphRAG's indexing does it after extraction, according to the docs mirrors I found.</p>
+</div>
+
+<h2>Read next</h2>
+<p>Primary source: the <a href="https://arxiv.org/abs/2404.16130">GraphRAG paper</a>. For now, read the abstract and the section on how the graph index is built. Skim the rest.</p>
+<p class="note">Questions are welcome. Ask your teacher anything that felt unclear: why a verb became an edge, how SQL compares, or what to do with phrases that are neither. Next lesson, you will write the same graph in Cypher.</p>
+
+<footer>See the sources and caveats in <code>RESOURCES.md</code>. Links were found by search; the sandbox that built this lesson could not open them.</footer>
+</main>
+<script src="../assets/tagger.js"></script>
+<script src="../assets/quiz.js"></script>
+</body>
+</html>
